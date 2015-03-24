@@ -8,7 +8,7 @@ To Run:
 
 Installation List:
 ------------------
--          Fiddler2 (for .NET4) http://www.telerik.com/download/fiddler
+-          Fiddler2 http://www.telerik.com/download/fiddler
 -          Python (version 2.7.9) https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi
 -          Twisted https://pypi.python.org/pypi/Twisted
 -          Scrapy https://github.com/scrapy/scrapy/zipball/0.24 
