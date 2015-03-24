@@ -2,6 +2,9 @@
 
 This project will create a scraping system for several car purchasing sites (e.g. Autotrader)
 
+To Run:
+-------
+- In the Command Line run: "scrapy crawl auto_trader -o cars.json -t json"
 
 Installation List:
 ------------------
