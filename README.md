@@ -4,11 +4,13 @@ This project will create a scraping system for several car purchasing sites (e.g
 
 To Run:
 -------
+- Open Command Line (start -> run -> cmd
+- type "cd C:\Users\colinmc\Documents\GitHub\AutoSearch"
 - In the Command Line run: "scrapy crawl auto_trader -o cars.json -t json"
 
 Installation List:
 ------------------
--          Fiddler2 (for .NET4) http://www.telerik.com/download/fiddler
+-          Fiddler2 http://www.telerik.com/download/fiddler
 -          Python (version 2.7.9) https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi
 -          Twisted https://pypi.python.org/pypi/Twisted
 -          Scrapy https://github.com/scrapy/scrapy/zipball/0.24 
