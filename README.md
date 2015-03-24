@@ -5,7 +5,7 @@ This project will create a scraping system for several car purchasing sites (e.g
 To Run:
 -------
 - Open Command Line (start -> run -> cmd
-- type "cd C:\Users\colinmc\Documents\GitHub\AutoSearch"
+- type "cd C:\Users\colinmc\Documents\GitHub\AutoSearch\autotrader"
 - In the Command Line run: "scrapy crawl auto_trader -o cars.json -t json"
 
 Installation List:
