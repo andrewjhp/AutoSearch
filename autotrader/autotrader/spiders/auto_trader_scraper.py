@@ -21,13 +21,15 @@ class AutoTraderScraper(BaseSpider):
             car = CarItem()
             
             car_title = result.select('./div[@class="search-result__titles"]/h1[@class="search-result__title"]/a/text()')
+            car_cost = result.select('./div[@class="search-result__titles"]/div[@class="search-result__price"]/text()')
             #car_attrs = result.select('./ul[@class="search-result__attributes"]/li').extract()
             
-            #print car_title
-            print car_title
-            car["type"] = car_title
-            #car["model"] = car_attrs[1]
-            
+            print car_title.re('[A-Za-z]+')
+            car["make"] = car_title.extract()
+            #car["model"] = ""
+            #car["engine"] = ""
+            car["cost"] = car_cost.re("[0-9\.,]+")
+
             cars.append(car)
         
         return cars
