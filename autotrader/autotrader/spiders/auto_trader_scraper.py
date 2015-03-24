@@ -12,16 +12,23 @@ class AutoTraderScraper(BaseSpider):
 
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
-                
-        cars = []
-        results = hxs.select('//ul[@class="search-page__results"]/li/article/div[@class="search-result__r1"]')
         
-        for result in results:
+        cars = []        
+        results = hxs.select('//ul[@class="search-page__results"]/li/article/div[@class="search-result__r1"]/div[@class="search-result__content"]')
+                
+        for index, result in enumerate(results):
+            #print results
             car = CarItem()
-            car["type"] = "X1"
-            car["model"] = "BMW"
+            
+            car_title = result.select('./div[@class="search-result__titles"]/h1[@class="search-result__title"]/a/text()')
+            #car_attrs = result.select('./ul[@class="search-result__attributes"]/li').extract()
+            
+            #print car_title
+            print car_title
+            car["type"] = car_title
+            #car["model"] = car_attrs[1]
+            
             cars.append(car)
-            print result
         
         return cars
         
