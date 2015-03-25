@@ -11,3 +11,6 @@ class CarItem(Item):
     engine = Field()
     age = Field()
     cost = Field()
+    mileage = Field() #[CM] added mileage, gearbox and fuel
+    gearbox = Field()
+    fuel = Field()
