@@ -7,7 +7,7 @@ class exchangeScraper(BaseSpider):
     name = "exchange"
     allowed_domains = ["www.exchangeandmart.co.uk"]
     start_urls = [
-        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/m3/any-distance-from-ml85us?sort=newestfirst",
+        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/1-series/any-distance-from-ml8-5us?sort=newestfirst",
     ]
 
     def parse(self, response):
@@ -19,9 +19,19 @@ class exchangeScraper(BaseSpider):
         for index, result in enumerate(result_content_list):
             car = CarItem()                
             
-            car_title = result.select('./div[2]/div/div[1]/a/text()')
+            car_title = result.select('./div[2]/div/div[1]/a/text()') 
+            car_cost = result.select('./div[2]/div/div[3]/div[1]/div[1]/text()')
+            car_age = result.select('./div[2]/div/div[3]/div[1]/div[2]/text()')
+            car_mileage = result.select('./div[2]/div/div[3]/div[1]/div[3]/text()')
+            car_gearbox = result.select('./div[2]/div/div[3]/div[1]/div[4]/text()')
+            car_fuel = result.select('./div[2]/div/div[3]/div[1]/div[5]/text()')
             
             car["title"] = car_title.extract()
+            car["cost"] = car_cost.re("[\d,\.]+")
+            car["age"] = car_age.extract()
+            car["mileage"] = car_mileage.extract()
+            car["gearbox"] = car_gearbox.extract()
+            car["fuel"] = car_fuel.extract()
 
             
             cars.append(car)
