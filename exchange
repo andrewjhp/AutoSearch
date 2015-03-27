@@ -7,25 +7,25 @@ class exchangeScraper(BaseSpider):
     name = "exchange"
     allowed_domains = ["www.exchangeandmart.co.uk"]
     start_urls = [
-        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/1-series/any-distance-from-ml8-5us?sort=newestfirst"
-        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/3-series/any-distance-from-ml8-5us?sort=newestfirst",
+        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/1-series/any-distance-from-ml8-5us?sort=newestfirst",
+        "http://www.exchangeandmart.co.uk/used-cars-for-sale/bmw/6-series/any-distance-from-ml8-5us?sort=newestfirst"
     ]
 
     def parse(self, response):
         response_html = HtmlXPathSelector(response)
   
         cars = []        
-        result_content_list = response_html.select('//div[@id="contentSearchBox"]/div[@id="results"]')
+        result_content_list = response_html.select('//div[@id="contentSearchBox"]/div[@id="results"]/div[@class="litem "]/div[@class="litemb"]')
         
         for index, result in enumerate(result_content_list):
             car = CarItem()                
             
-            car_title = result.select('./div[2]/div/div[1]/a/text()')
-            car_cost = result.select('./div[2]/div/div[3]/div[1]/div[1]/div/text()')
-            car_age = result.select('./div[2]/div/div[3]/div[1]/div[2]/div/text()')
-            car_mileage = result.select('./div[2]/div/div[3]/div[1]/div[3]/div/text()')
-            car_gearbox = result.select('./div[2]/div/div[3]/div[1]/div[4]/div/text()')
-            car_fuel = result.select('./div[2]/div/div[3]/div[1]/div[5]/div/text()')
+            car_title = result.select('./div[@class="litemh"]/a/text()')
+            car_cost = result.select('./div[@class="litmInfo"]/div[@class="fl"]/div[@class="litmRow h"]/div/text()')
+            car_age = result.select('./div[@class="litmInfo"]/div[@class="fl"]/div[@class="litmRow"][1]/div/text()')
+            car_mileage = result.select('./div[@class="litmInfo"]/div[@class="fl"]/div[@class="litmRow"][2]/div/text()')
+            car_gearbox = result.select('./div[@class="litmInfo"]/div[@class="fl"]/div[@class="litmRow"][3]/div/text()')
+            car_fuel = result.select('./div[@class="litmInfo"]/div[@class="fl"]/div[@class="litmRow"][4]/div/text()')
             
             car["title"] = car_title.extract()
             car["cost"] = car_cost.re("[\d,\.]+")
