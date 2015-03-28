@@ -1,0 +1,32 @@
+class carpagesScraper(BaseSpider):
+    name = "carpages"
+    allowed_domains = ["www.carpages.co.uk"]
+    start_urls = [
+        "http://www.carpages.co.uk/used-cars/?makeId=50003&modelId=50700&minbudget=&maxbudget=&minyear=&maxyear=&postcode=e.g.+SW1A+0AA&bodyIds=-1&transmissionIds=-1&minmileage=&maxmileage=&fuelIds=-1&keywords=&saletypeIds=-1&sort=Price-Desc&rpp=10&purchasetypeId=&page=1"
+    ]
+
+    def parse(self, response):
+        response_html = HtmlXPathSelector(response)
+  
+        cars = []        
+        result_content_list = response_html.select('//div[@id="results"]/div[@class="result-row featured"]')
+        
+        for index, result in enumerate(result_content_list):
+            car = CarItem()                
+            
+            car_title = result.select('./div[@class="header"]/div[@class="title"]/a/text()')
+            car_cost = result.select('./div[@class="spec"]/dl/dt[@class="field-price"]/text()')
+            engine_size = result.select('./div[@class="spec"]/dl/dt[3]/text()')
+            car_mileage = result.select('./div[@class="spec"]/dl/dt[2]/text()')
+            car_gearbox = result.select('./div[@class="spec"]/dl/dt[5]/text()')
+
+            
+            car["title"] = car_title.extract()
+            car["cost"] = car_cost.re("[\d,\.]+")
+            car["engine"] = engine_size.extract()
+            car["mileage"] = car_mileage.extract()
+            car["gearbox"] = car_gearbox.extract()
+
+            
+            cars.append(car)
+        return cars
