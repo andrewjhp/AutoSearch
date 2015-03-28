@@ -14,14 +14,16 @@ class gumtreeScraper(BaseSpider):
         response_html = HtmlXPathSelector(response)
   
         cars = []        
-        result_content_list = response_html.select('//ul[@class="clearfix list-listing-mini "]/li/article[@class="listing-maxi"]/a[@class="listing-link"]/div[@class="listing-content"]')
+        result_content_list = response_html.select('//div[@id="srp-results"]/div[@class="grid-row"]/div[@class="grid-col-12 space-mbxs"]/ul[@class="clearfix list-listing-mini "]/li/article[@class="listing-maxi"]/a[@class="listing-link"]/div[@class="listing-content"]')
         
         for index, result in enumerate(result_content_list):
             car = CarItem()                
             
             car_title = result.select('./h2[@class="listing-title"]/text()')
+            car_age = result.select('./ul[@class="listing-attributes inline-list hide-fully-to-m"]/li[1]/span[@class="releaseDate"]/text()')
             
             car["title"] = car_title.extract()
+            car["age"] = car_age.extract()
 
             
             cars.append(car)
