@@ -1,0 +1,31 @@
+from scrapy.spider import BaseSpider
+from scrapy.selector import HtmlXPathSelector
+
+from whatcar.items import CarItem
+
+class whatcarScraper(BaseSpider):
+    name = "whatcar"
+    allowed_domains = ["www.whatcar.com/home/used-cars"]
+    start_urls = [
+        "http://www.whatcar.com/classifieds?Category=approved-used-cars&M=269"
+    ]
+
+    def parse(self, response):
+        response_html = HtmlXPathSelector(response)
+  
+        cars = []        
+        result_content_list = response_html.select('//div[@id="search-results"]/div[@class="result-contain"]/div[@class="ad-listing"]')
+        
+        for index, result in enumerate(result_content_list):
+            car = CarItem()                
+            
+            car_title = result.select('./div[@class="listing-headline"]/a/h3/text()')
+            car_cost = result.select('./div[@class="listing-headline"]/a/div[@class="price"]/span/text()')
+            
+            
+            car["title"] = car_title.extract()
+            car["cost"] = car_cost.re("[\d,\.]+")
+            
+            
+            cars.append(car)
+        return cars
