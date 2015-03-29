@@ -1,0 +1,42 @@
+from scrapy.spider import BaseSpider
+from scrapy.selector import HtmlXPathSelector
+
+from AAcars.items import CarItem
+
+class whatcarScraper(BaseSpider):
+    name = "AAcars"
+    allowed_domains = ["www.vcars.co.uk/used-cars/"]
+    start_urls = [
+        "http://www.vcars.co.uk/used-cars/displaycars.php?mymakeid=&mymodelid=&travel=2000&age=&mileage=&enginesize=&fueltype=&transmission=&pricefrom=0&priceto=1000000&mech_check=&warranty=&keywordsearch=bmw+116&sortby=closest&fullpostcode=ml85us",
+        "http://www.vcars.co.uk/used-cars/displaycars.php?mymakeid=&mymodelid=&travel=2000&age=&mileage=&enginesize=&fueltype=&transmission=&pricefrom=0&priceto=1000000&mech_check=&warranty=&keywordsearch=bmw+320&sortby=closest&fullpostcode=ml85us"
+    ] #url brings back the specific car 320 or 116 for example and can be changed within the url
+
+    def parse(self, response):
+        response_html = HtmlXPathSelector(response)
+  
+        cars = []        
+        result_content_list = response_html.select('//div[@class="facet-content"]/div[@id="results"]/div[@class="result"]')
+        
+        for index, result in enumerate(result_content_list):
+            car = CarItem()                
+            
+            car_title = result.select('./a[@class="list-title"]/text()')
+            car_cost = result.select('./div[@class="list-primary"]/ul/li[@class="list-price"]/a/text()')
+            car_age = result.select('./div[@class="list-secondary"]/ul/li[1]/text()')
+            car_mileage = result.select('./div[@class="list-secondary"]/ul/li[4]/text()')
+            car_gearbox = result.select('./div[@class="list-secondary"]/ul/li[3]/text()')
+            car_fuel = result.select('./div[@class="list-secondary"]/ul/li[2]/text()')
+            
+            
+            
+            car["title"] = car_title.extract()
+            car["cost"] = car_cost.re("[\d,\.]+")
+            car["age"] = car_age.extract()
+            car["mileage"] = car_mileage.extract()
+            car["gearbox"] = car_gearbox.extract()
+            car["fuel"] = car_fuel.extract()
+            
+            
+            
+            cars.append(car)
+        return cars
